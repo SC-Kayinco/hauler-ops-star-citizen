@@ -41,8 +41,13 @@ pack your ship's hold in 2D and 3D — which crate goes where, and in what load/
 
 ## Install (Windows)
 
-1. Download the latest `HAULER-OPS-<version>.exe` from the [Releases](../../releases/latest) page.
-2. Run it — it's a portable app, no installer.
+Grab the latest from the [Releases](../../releases/latest) page — two options:
+
+- **`HAULER-OPS-Setup-<version>.exe`** (installer, recommended) — installs the app, adds a desktop
+  and Start-menu shortcut, and shows up in Add/Remove Programs. No admin rights needed.
+- **`HAULER-OPS-<version>-portable.exe`** (portable) — a single file that just runs when you
+  double-click it. Nothing is installed, no shortcut is created; keep the file somewhere and run it
+  whenever you like.
 
 ### "Windows protected your PC" — is it safe?
 

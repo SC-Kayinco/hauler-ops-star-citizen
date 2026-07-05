@@ -15,7 +15,7 @@
     "electron:dev": "concurrently -k \"npm run dev\" \"wait-on tcp:127.0.0.1:5173 && electron .\"",
     "package:app": "npm run build && node scripts/repackage.cjs",
     "dist:zip": "npm run package:app && node scripts/zip.cjs",
-    "dist": "npm run build && electron-builder --win portable"
+    "dist": "npm run build && electron-builder --win"
   },
   "dependencies": {
     "@react-three/drei": "^9.114.3",
@@ -50,10 +50,22 @@
       "electron/**/*"
     ],
     "win": {
-      "target": "portable"
+      "target": [
+        "nsis",
+        "portable"
+      ]
     },
     "portable": {
-      "artifactName": "HAULER-OPS-${version}.exe"
+      "artifactName": "HAULER-OPS-${version}-portable.exe"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "HAULER OPS",
+      "artifactName": "HAULER-OPS-Setup-${version}.exe"
     }
   }
 }
