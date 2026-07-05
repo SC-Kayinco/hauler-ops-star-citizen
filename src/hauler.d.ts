@@ -4,6 +4,12 @@ export interface CaptureFile {
   mtime: number
 }
 
+export interface UpdateStatus {
+  state: 'downloading' | 'ready'
+  version?: string
+  percent?: number
+}
+
 /** Bridge exposed by electron/preload.cjs — only present in the desktop app. */
 export interface HaulerBridge {
   getCapturesDir: () => Promise<string>
@@ -16,6 +22,10 @@ export interface HaulerBridge {
   readModel: (filePath: string) => Promise<string | null>
   /** Open a folder picker to change the screenshot folder; resolves to the current path. */
   pickCapturesDir: () => Promise<string>
+  /** Subscribe to auto-update status events. Returns an unsubscribe function. */
+  onUpdateStatus: (cb: (status: UpdateStatus) => void) => () => void
+  /** Apply the downloaded update now (quits and relaunches into the new version). */
+  quitAndInstall: () => Promise<void>
 }
 
 declare global {

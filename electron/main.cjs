@@ -192,30 +192,41 @@ ipcMain.handle('hauler:read-model', (_e, filePath) => {
 // release metadata (latest.yml) and asks "is there a newer version?" — it sends nothing about
 // the user. The portable build can't self-update, so this is a no-op there. Fully best-effort:
 // any failure (offline, portable, etc.) is swallowed so it never disrupts the app.
+let updater = null
+function sendUpdateStatus(payload) {
+  if (mainWin && !mainWin.isDestroyed()) mainWin.webContents.send('hauler:update-status', payload)
+}
 function initAutoUpdater() {
   if (isDev) return
-  let autoUpdater
   try {
-    ;({ autoUpdater } = require('electron-updater'))
+    ;({ autoUpdater: updater } = require('electron-updater'))
   } catch {
     return // updater not bundled (e.g. portable) — skip silently
   }
-  autoUpdater.autoDownload = true
-  autoUpdater.autoInstallOnAppQuit = true
-  autoUpdater.on('error', (err) => {
+  updater.autoDownload = true
+  updater.autoInstallOnAppQuit = true
+  updater.on('error', (err) => {
     console.error('[updater]', (err && err.message) || err)
   })
-  autoUpdater.on('update-downloaded', (info) => {
-    if (mainWin && !mainWin.isDestroyed()) {
-      mainWin.webContents.send('hauler:update-ready', { version: info && info.version })
-    }
-  })
+  // Drive the in-app banner (renderer decides how to show it).
+  updater.on('update-available', (info) => sendUpdateStatus({ state: 'downloading', version: info && info.version }))
+  updater.on('download-progress', (p) => sendUpdateStatus({ state: 'downloading', percent: p && Math.round(p.percent) }))
+  updater.on('update-downloaded', (info) => sendUpdateStatus({ state: 'ready', version: info && info.version }))
   try {
-    autoUpdater.checkForUpdatesAndNotify()
+    updater.checkForUpdatesAndNotify()
   } catch {
     /* offline / best-effort */
   }
 }
+
+// "Restart now" button in the update banner → apply the downloaded update immediately.
+ipcMain.handle('hauler:quit-and-install', () => {
+  try {
+    if (updater) updater.quitAndInstall()
+  } catch (e) {
+    console.error('[updater] quitAndInstall', (e && e.message) || e)
+  }
+})
 
 app.whenReady().then(() => {
   createWindow()

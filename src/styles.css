@@ -5,6 +5,63 @@
   height: 100%;
 }
 
+/* ---- Auto-update banner (desktop) ---- */
+.update-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px;
+  font-family: var(--font-head, inherit);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--line);
+}
+.update-banner--downloading {
+  background: color-mix(in srgb, var(--cyan) 12%, transparent);
+  color: var(--text-muted);
+}
+.update-banner--ready {
+  background: color-mix(in srgb, var(--good) 16%, transparent);
+  color: var(--text);
+}
+.update-banner__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+.update-banner--ready .update-banner__dot {
+  background: var(--good);
+  box-shadow: 0 0 8px var(--good);
+}
+.update-banner__btn {
+  margin-left: auto;
+  cursor: pointer;
+  border: 1px solid var(--good);
+  background: color-mix(in srgb, var(--good) 20%, transparent);
+  color: var(--text);
+  font: inherit;
+  padding: 4px 12px;
+  border-radius: var(--radius, 4px);
+}
+.update-banner__btn:hover {
+  background: color-mix(in srgb, var(--good) 34%, transparent);
+}
+.update-banner__close {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+}
+.update-banner__close:hover {
+  color: var(--text);
+}
+
 /* Below the top nav: persistent profile rail + the scrolling main area. */
 .app-body {
   flex: 1;

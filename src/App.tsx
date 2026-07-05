@@ -8,6 +8,7 @@ import PlanView from '@/components/plan/PlanView'
 import EarningsView from '@/components/earnings/EarningsView'
 import StarMapView from '@/components/starmap/StarMapView'
 import SettingsView from '@/components/settings/SettingsView'
+import UpdateBanner from '@/components/layout/UpdateBanner'
 import './styles.css'
 
 export default function App() {
@@ -15,6 +16,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <UpdateBanner />
       <TopNav />
       <div className="app-body">
         <ProfileSidebar />

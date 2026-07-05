@@ -21,4 +21,12 @@ contextBridge.exposeInMainWorld('hauler', {
     ipcRenderer.on('hauler:new-capture', handler)
     return () => ipcRenderer.removeListener('hauler:new-capture', handler)
   },
+  /** Subscribe to auto-update status ({ state:'downloading'|'ready', version?, percent? }). */
+  onUpdateStatus: (cb) => {
+    const handler = (_e, payload) => cb(payload)
+    ipcRenderer.on('hauler:update-status', handler)
+    return () => ipcRenderer.removeListener('hauler:update-status', handler)
+  },
+  /** Apply the downloaded update now (quits and relaunches into the new version). */
+  quitAndInstall: () => ipcRenderer.invoke('hauler:quit-and-install'),
 })

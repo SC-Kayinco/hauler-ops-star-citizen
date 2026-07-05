@@ -2,6 +2,12 @@
 
 ---
 
+## v0.6.2 — 2026-07-05 (Uygulama içi güncelleme banner'ı)
+- **In-app güncelleme banner'ı:** Windows bildirimi kolay kaçıyor — artık güncelleme uygulamanın
+  kendi içinde görünüyor: indirilirken sessiz bir şerit, hazır olunca **"Update vX.Y.Z is ready —
+  [Restart now]"** çubuğu (tek tıkla yeniden başlatıp kurar). Kapatma (×) ile gizlenebilir; bir
+  sonraki çıkışta yine kurulur.
+
 ## v0.6.1 — 2026-07-05 (Filo düzeltmeleri + otomatik güncelleme)
 - **Otomatik güncelleme (installer):** installer sürümü artık açılışta GitHub'dan yeni sürüm
   kontrol eder, arka planda indirir ve bir sonraki açılışta kurar — elle yeniden indirme yok.
