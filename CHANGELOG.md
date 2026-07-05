@@ -13,6 +13,8 @@
   tıklayınca editör açılır ("＋ Add photo" ipucu).
 - **Varsayılan bio:** İngilizce örnek pilot personası artık programla geliyor (kendi bio'nu ezmez).
 - **Fleet referans notu:** "topluluk kaynaklı referans, oyun-içi doğrula/düzenle".
+- **Gatac Railen (yeni yerleşik gemi):** 640 SCU (20×32) resmi geometriyle yerleşik referans gemi
+  olarak eklendi — demolar salvage gemisi yerine gerçek bir hauler ile başlasın diye.
 - **RAFT düzeltildi:** 192 → 96 SCU (4× 24 SCU konteyner).
 - **GROUP BY taşındı:** LOAD PLAN başlığından çıkıp Route'un üstünde kendi kutusuna.
 - **Yayın dosyaları:** halka açık README, MIT LICENSE, .gitignore. **Güvenlik denetimi: TEMİZ**
