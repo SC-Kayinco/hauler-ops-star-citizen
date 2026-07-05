@@ -41,7 +41,7 @@ pack your ship's hold in 2D and 3D — which crate goes where, and in what load/
 
 ## Install (Windows)
 
-1. Download the latest `HAULER OPS.exe` from the [Releases](../../releases) page.
+1. Download the latest `HAULER-OPS-<version>.exe` from the [Releases](../../releases/latest) page.
 2. Run it — it's a portable app, no installer.
 3. **SmartScreen warning:** since the app isn't code-signed, Windows may show "Windows protected
    your PC". Click **More info → Run anyway**. (The full source is in this repo if you'd rather
