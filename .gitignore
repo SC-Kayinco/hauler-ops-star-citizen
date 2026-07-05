@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output (published to GitHub Releases instead, not committed)
+dist/
+release/
+tsconfig.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Claude Code local config
+.claude/
+
+# Internal dev notes (not part of the public docs)
+DEVLOG.md
+BACKLOG.md
+SESSION-HANDOFF.md
+
+# Local env / secrets
+*.local
+.env

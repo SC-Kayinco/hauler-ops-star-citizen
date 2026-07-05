@@ -1,0 +1,190 @@
+:root {
+  /* RSI-inspired holographic palette */
+  --bg-deep: #06131f;
+  --bg-mid: #0a2236;
+  --bg-panel: rgba(18, 52, 78, 0.55);
+  --bg-panel-solid: #0e2638;
+  --bg-panel-hover: rgba(28, 72, 104, 0.7);
+
+  --line: rgba(96, 168, 208, 0.14);
+  --line-strong: rgba(96, 168, 208, 0.32);
+
+  --cyan: #4db8e8;
+  --cyan-bright: #7fe3ff;
+  --cyan-dim: #3a7fa0;
+  --cyan-glow: rgba(96, 200, 245, 0.55);
+
+  --amber: #f0a830;
+
+  --text: #d6ecf7;
+  --text-muted: #7fa8c0;
+  --text-faint: #4d7088;
+
+  --danger: #ff5d6c;
+  --good: #4ce0a0;
+
+  --radius: 10px;
+  --font-head: 'Chakra Petch', 'Rajdhani', system-ui, sans-serif;
+  --font-body: 'Rajdhani', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(40, 110, 160, 0.25), transparent 60%),
+    radial-gradient(ellipse 90% 70% at 80% 110%, rgba(30, 80, 120, 0.18), transparent 55%),
+    linear-gradient(160deg, var(--bg-mid) 0%, var(--bg-deep) 70%);
+  background-attachment: fixed;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle global grid overlay (HUD feel) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, black 40%, transparent 85%);
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+button {
+  font-family: var(--font-head);
+  cursor: pointer;
+  color: var(--text);
+  background: none;
+  border: none;
+}
+
+input,
+select,
+textarea {
+  font-family: var(--font-body);
+  color: var(--text);
+  background: rgba(8, 26, 40, 0.7);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 15px;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgba(96, 200, 245, 0.15);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(8, 26, 40, 0.4);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cyan-dim);
+  border-radius: 6px;
+}
+
+/* ---------- HUD primitives ---------- */
+.hud-label {
+  font-family: var(--font-head);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.panel {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  backdrop-filter: blur(6px);
+}
+
+/* Angled-corner panel like the RSI spec card */
+.panel--clip {
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 22px 100%, 0 calc(100% - 22px));
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cyan-bright);
+  background: rgba(40, 110, 150, 0.18);
+  border: 1px solid var(--cyan-dim);
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+.btn:hover {
+  background: rgba(60, 150, 200, 0.3);
+  border-color: var(--cyan);
+  box-shadow: 0 0 14px rgba(96, 200, 245, 0.25);
+}
+.btn--primary {
+  color: #04161f;
+  background: var(--cyan);
+  border-color: var(--cyan-bright);
+  font-weight: 600;
+}
+.btn--primary:hover {
+  background: var(--cyan-bright);
+}
+.btn--ghost {
+  background: transparent;
+}
+.btn--danger {
+  color: var(--danger);
+  border-color: rgba(255, 93, 108, 0.5);
+  background: rgba(255, 93, 108, 0.08);
+}
+.btn--danger:hover {
+  background: rgba(255, 93, 108, 0.18);
+}
+.btn--sm {
+  padding: 5px 10px;
+  font-size: 11px;
+}

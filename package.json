@@ -1,0 +1,59 @@
+{
+  "name": "star-citizen-hauling-planner",
+  "private": true,
+  "version": "0.6.0",
+  "type": "module",
+  "description": "Star Citizen cargo hauling planner",
+  "author": "Hauler Ops",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "electron": "electron .",
+    "electron:dev": "concurrently -k \"npm run dev\" \"wait-on tcp:127.0.0.1:5173 && electron .\"",
+    "package:app": "npm run build && node scripts/repackage.cjs",
+    "dist:zip": "npm run package:app && node scripts/zip.cjs",
+    "dist": "npm run build && electron-builder --win portable"
+  },
+  "dependencies": {
+    "@react-three/drei": "^9.114.3",
+    "@react-three/fiber": "^8.17.10",
+    "nanoid": "^5.0.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tesseract.js": "^7.0.0",
+    "three": "^0.169.0",
+    "zustand": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.169.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "concurrently": "^10.0.3",
+    "electron": "^42.3.3",
+    "electron-builder": "^26.15.0",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.1",
+    "wait-on": "^9.0.10"
+  },
+  "build": {
+    "appId": "com.haulerops.app",
+    "productName": "HAULER OPS",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "target": "portable"
+    },
+    "portable": {
+      "artifactName": "HAULER-OPS-${version}.exe"
+    }
+  }
+}
