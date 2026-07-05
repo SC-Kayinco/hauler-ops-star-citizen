@@ -1,4 +1,4 @@
-import type { BayMount, CargoBay, DoorEdge, Ship } from '@/types'
+import type { BayBaseFace, BayMount, CargoBay, DoorEdge, Ship } from '@/types'
 
 /**
  * Build a simple rectangular cargo bay.
@@ -10,7 +10,13 @@ export function makeBay(
   width: number,
   length: number,
   maxStackHeight: number,
-  opts: { doorEdge?: DoorEdge; maxContainerScu?: number; mount?: BayMount } = {},
+  opts: {
+    doorEdge?: DoorEdge
+    maxContainerScu?: number
+    mount?: BayMount
+    side?: 'left' | 'right'
+    baseFace?: BayBaseFace
+  } = {},
 ): CargoBay {
   return {
     id,
@@ -22,6 +28,8 @@ export function makeBay(
     blockedCells: [],
     maxContainerScu: opts.maxContainerScu,
     mount: opts.mount ?? 'floor',
+    side: opts.side,
+    baseFace: opts.baseFace,
   }
 }
 
@@ -30,36 +38,12 @@ export function makeBay(
  * Capacities and grids are best-known defaults and are FULLY EDITABLE — the
  * player owns this data and should redraw grids from in-game measurements.
  *
- * The Drake Clipper is the user's own ship (builtin:false); the rest are
- * reference hulls (builtin:true) for the "which ship fits this contract?"
- * suggester and can be cloned into an editable copy.
+ * The Argo MOTH and Gatac Railen are the user's own hauling ships
+ * (builtin:false); the rest are reference hulls (builtin:true) for the
+ * "which ship fits this contract?" suggester and can be cloned into an
+ * editable copy.
  */
 export const SEED_SHIPS: Ship[] = [
-  {
-    id: 'drake-clipper',
-    name: 'Clipper',
-    manufacturer: 'Drake Interplanetary',
-    cargoScu: 12,
-    sizeCategory: 'Small',
-    crew: 1,
-    lengthM: 27,
-    beamM: 18,
-    heightM: 21,
-    speedMs: 210,
-    role: 'Exploration / Generalist',
-    accent: '#f0a830',
-    maxContainerScu: 2,
-    builtin: false,
-    specs: [
-      { label: 'Class', value: 'Generalist' },
-      { label: 'Quantum', value: 'Size 2' },
-      { label: 'Weapons', value: '4x Size 3' },
-      { label: 'Missiles', value: '8x Size 3' },
-      { label: 'Special', value: 'T3 MedBed + Fabricator' },
-      { label: 'Door limit', value: '~2 SCU crates' },
-    ],
-    bays: [makeBay('main', 'Rear Hold', 2, 6, 1, { doorEdge: 'back', maxContainerScu: 2 })],
-  },
   {
     id: 'argo-moth',
     name: 'MOTH',
@@ -80,8 +64,8 @@ export const SEED_SHIPS: Ship[] = [
     ],
     bays: [
       makeBay('floor', 'Floor Hold', 4, 4, 2, { doorEdge: 'back', mount: 'floor' }),
-      makeBay('left', 'Left Rack', 6, 4, 4, { doorEdge: 'left', mount: 'wall' }),
-      makeBay('right', 'Right Rack', 6, 4, 4, { doorEdge: 'right', mount: 'wall' }),
+      makeBay('left', 'Left Rack', 6, 4, 4, { doorEdge: 'left', mount: 'wall', side: 'left' }),
+      makeBay('right', 'Right Rack', 6, 4, 4, { doorEdge: 'right', mount: 'wall', side: 'right' }),
     ],
   },
   {
@@ -98,7 +82,7 @@ export const SEED_SHIPS: Ship[] = [
     role: 'Hauling (wall racks)',
     accent: '#4db8e8',
     maxContainerScu: 32,
-    builtin: true,
+    builtin: false,
     specs: [
       { label: 'Cargo racks', value: '6 wall racks (2× 64 + 4× 128)' },
       { label: 'Container', value: 'up to 32 SCU' },

@@ -200,7 +200,7 @@ export const useStore = create<AppState>()(
       routeResult: null,
       profile: EMPTY_PROFILE,
       view: 'fleet',
-      selectedShipId: 'drake-clipper',
+      selectedShipId: 'gatac-railen',
       maxBox: 32,
       groupMode: 'destination',
       ocrMode: 'auto',
@@ -428,11 +428,11 @@ export const useStore = create<AppState>()(
       setGroupMode: (m) => set({ groupMode: m }),
       setOcrMode: (m) => set({ ocrMode: m }),
       resetAll: () =>
-        set({ ships: SEED_SHIPS, missions: [], selectedShipId: 'drake-clipper', routeResult: null }),
+        set({ ships: SEED_SHIPS, missions: [], selectedShipId: 'gatac-railen', routeResult: null }),
     }),
     {
       name: 'sc-hauling-planner',
-      version: 12,
+      version: 13,
       // Parsed import cards are session-only review state — keep them out of disk
       // storage (they carry base64 thumbnails and shouldn't reappear stale on restart).
       partialize: (state) => {
@@ -478,6 +478,26 @@ export const useStore = create<AppState>()(
           const ids = new Set(state.ships.map((s) => s.id))
           for (const seed of SEED_SHIPS) {
             if (!ids.has(seed.id)) state.ships.push(seed)
+          }
+        }
+        // v13: Drake Clipper dropped (not a hauler); Gatac Railen promoted from a reference
+        // hull to an owned ship; the MOTH's right rack was mistakenly anchored to the left
+        // wall. Patch persisted fleets so existing installs match the corrected seed.
+        if (version < 13 && Array.isArray(state.ships)) {
+          state.ships = state.ships.filter((s) => s.id !== 'drake-clipper')
+          const railen = state.ships.find((s) => s.id === 'gatac-railen')
+          if (railen) railen.builtin = false
+          const moth = state.ships.find((s) => s.id === 'argo-moth')
+          const rightRack = moth?.bays?.find((b) => b.id === 'right')
+          if (rightRack && !rightRack.baseFace && rightRack.side !== 'right') rightRack.side = 'right'
+          const leftRack = moth?.bays?.find((b) => b.id === 'left')
+          if (leftRack && !leftRack.baseFace && !leftRack.side) leftRack.side = 'left'
+        }
+        // If the selected ship no longer exists (e.g. Clipper removed), fall back sanely.
+        {
+          const s = state as { ships?: Ship[]; selectedShipId?: string }
+          if (Array.isArray(s.ships) && s.ships.length && !s.ships.some((sh) => sh.id === s.selectedShipId)) {
+            s.selectedShipId = s.ships[0].id
           }
         }
         if (!Array.isArray(state.earnings)) state.earnings = []
