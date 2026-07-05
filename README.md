@@ -43,9 +43,27 @@ pack your ship's hold in 2D and 3D — which crate goes where, and in what load/
 
 1. Download the latest `HAULER-OPS-<version>.exe` from the [Releases](../../releases/latest) page.
 2. Run it — it's a portable app, no installer.
-3. **SmartScreen warning:** since the app isn't code-signed, Windows may show "Windows protected
-   your PC". Click **More info → Run anyway**. (The full source is in this repo if you'd rather
-   inspect or build it yourself.)
+
+### "Windows protected your PC" — is it safe?
+
+Yes. This is a **free, unsigned hobby app** — code-signing certificates are expensive, so Windows
+doesn't recognize the publisher yet and shows a warning. It is **not** malware (the full source is
+right here in this repo, and there is no telemetry — see [Privacy](#privacy)). Two
+cases, depending on your Windows security settings:
+
+- **Regular SmartScreen** (most common): you'll see *"Windows protected your PC"*. Click
+  **More info → Run anyway**. That's it. As more people download it, this warning fades on its own.
+- **Smart App Control** (stricter — only on some clean-installed Windows 11 PCs): the block has
+  **no "Run anyway"** button, because Smart App Control refuses all unsigned apps. If you hit this,
+  your options are:
+  1. **Build it from source** yourself (see [Build from source](#build-from-source)) — runs with no
+     warning at all, and
+  2. (advanced) turn Smart App Control off — but note **that's a one-way switch** (it can only be
+     re-enabled by reinstalling Windows), so only do it if you understand the trade-off. Most people
+     should just build from source instead.
+
+Prefer not to run a random `.exe` at all? Totally fair — [build from source](#build-from-source),
+it's a couple of commands.
 
 ## Setup: capturing contracts
 
