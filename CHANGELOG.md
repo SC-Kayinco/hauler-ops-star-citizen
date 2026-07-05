@@ -2,6 +2,18 @@
 
 ---
 
+## v0.6.1 — 2026-07-05 (Filo düzeltmeleri + otomatik güncelleme)
+- **Otomatik güncelleme (installer):** installer sürümü artık açılışta GitHub'dan yeni sürüm
+  kontrol eder, arka planda indirir ve bir sonraki açılışta kurar — elle yeniden indirme yok.
+  (Portable sürüm kendini güncellemez.) Sadece public sürüm bilgisini çeker; kullanıcı verisi
+  gönderilmez.
+- **Kurulan sürüm + portable:** artık iki dosya — kurulum sihirbazlı installer (masaüstü/Başlat
+  kısayolu, Program Ekle/Kaldır) ve tek dosyalık portable.
+- **Your Ships düzeltmesi:** Drake Clipper kaldırıldı (hauling gemisi değil). Kendi gemilerin artık
+  **Argo MOTH + Gatac Railen**.
+- **MOTH Right Rack düzeltmesi:** sağ raf yanlışlıkla sol duvara oturuyordu; artık doğru şekilde
+  **sağ duvara** ("Right wall out →") — 2D/3D görünümde de doğru tarafta.
+
 ## v0.6.0 — 2026-07-04 (Ayarlar sekmesi + topluluk paylaşımı hazırlığı)
 - **⚙ Ayarlar sekmesi (yeni):** üst menüde dişli butonu + Settings görünümü. **Foto klasörü seçici**
   (Missions'tan taşındı), **Backup/Restore** (Fleet'ten taşındı + ne kaydettiğini anlatan açıklama),
