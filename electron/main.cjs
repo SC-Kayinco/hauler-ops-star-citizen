@@ -186,8 +186,40 @@ ipcMain.handle('hauler:read-model', (_e, filePath) => {
   }
 })
 
+// Auto-update (installer builds only). Checks GitHub Releases on startup for a newer version,
+// downloads it in the background, and shows a native notification when it's ready — it then
+// installs on next quit. This is the ONLY thing that talks to GitHub: it fetches the public
+// release metadata (latest.yml) and asks "is there a newer version?" — it sends nothing about
+// the user. The portable build can't self-update, so this is a no-op there. Fully best-effort:
+// any failure (offline, portable, etc.) is swallowed so it never disrupts the app.
+function initAutoUpdater() {
+  if (isDev) return
+  let autoUpdater
+  try {
+    ;({ autoUpdater } = require('electron-updater'))
+  } catch {
+    return // updater not bundled (e.g. portable) — skip silently
+  }
+  autoUpdater.autoDownload = true
+  autoUpdater.autoInstallOnAppQuit = true
+  autoUpdater.on('error', (err) => {
+    console.error('[updater]', (err && err.message) || err)
+  })
+  autoUpdater.on('update-downloaded', (info) => {
+    if (mainWin && !mainWin.isDestroyed()) {
+      mainWin.webContents.send('hauler:update-ready', { version: info && info.version })
+    }
+  })
+  try {
+    autoUpdater.checkForUpdatesAndNotify()
+  } catch {
+    /* offline / best-effort */
+  }
+}
+
 app.whenReady().then(() => {
   createWindow()
+  initAutoUpdater()
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })

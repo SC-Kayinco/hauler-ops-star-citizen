@@ -20,6 +20,7 @@
   "dependencies": {
     "@react-three/drei": "^9.114.3",
     "@react-three/fiber": "^8.17.10",
+    "electron-updater": "^6.8.9",
     "nanoid": "^5.0.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -45,6 +46,13 @@
     "directories": {
       "output": "release"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "SC-Kayinco",
+        "repo": "hauler-ops-star-citizen"
+      }
+    ],
     "files": [
       "dist/**/*",
       "electron/**/*"

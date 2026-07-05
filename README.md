@@ -49,6 +49,10 @@ Grab the latest from the [Releases](../../releases/latest) page — two options:
   double-click it. Nothing is installed, no shortcut is created; keep the file somewhere and run it
   whenever you like.
 
+> **Updates:** the **installer** build auto-updates — it quietly checks GitHub for new releases,
+> downloads them in the background, and installs on next launch (no need to re-download). The
+> portable build does **not** self-update, so pick the installer if you want automatic updates.
+
 ### "Windows protected your PC" — is it safe?
 
 Yes. This is a **free, unsigned hobby app** — code-signing certificates are expensive, so Windows
@@ -101,8 +105,9 @@ force a mode under **Settings → Mission OCR Reading**.
 Your data stays yours:
 
 - Screenshots and OCR are processed **100% locally** (bundled WASM engine).
-- The **only** outbound calls fetch **public commodity prices from UEX Corp** — no personal or
-  game data is ever sent.
+- Outbound calls are limited to: **public commodity prices from UEX Corp**, and (installer build
+  only) an **update check against this repo's GitHub Releases** — just "is there a newer version?".
+  No personal or game data is ever sent.
 - No telemetry, analytics, or accounts.
 
 **Full transparency:**
