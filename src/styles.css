@@ -3916,3 +3916,186 @@
   padding: 10px 14px;
   margin-bottom: 12px;
 }
+
+/* ============ Bay Designer (fullscreen 3D bay editor) ============ */
+.bay-designer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  background: var(--bg-deep);
+}
+.bd-scene {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+.bd-scene canvas {
+  display: block;
+}
+.bd-panel {
+  width: 320px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-left: 1px solid var(--line-strong);
+  background: linear-gradient(180deg, rgba(10, 30, 48, 0.96), rgba(7, 20, 33, 0.96));
+  overflow-y: auto;
+}
+.bd-head h2 {
+  font-family: var(--font-head);
+  font-size: 20px;
+  color: var(--cyan-bright);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+.bd-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: rgba(8, 26, 40, 0.6);
+}
+.bd-total strong {
+  font-family: var(--font-head);
+  font-size: 18px;
+  color: var(--good);
+}
+.bd-total.over strong {
+  color: var(--danger);
+}
+.bd-cap {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.bd-baylist {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.bd-bayrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: rgba(8, 26, 40, 0.45);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+.bd-bayrow:hover {
+  border-color: var(--cyan-dim);
+}
+.bd-bayrow.sel {
+  border-color: var(--amber);
+  background: rgba(240, 168, 48, 0.1);
+}
+.bd-bayname {
+  font-family: var(--font-head);
+  letter-spacing: 0.04em;
+}
+.bd-baydims {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.bd-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+.bd-row3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.bd-row3 input {
+  width: 100%;
+  min-width: 0;
+}
+.bd-scu {
+  padding-top: 4px;
+}
+.bd-scu strong {
+  color: var(--cyan-bright);
+}
+.bd-actions {
+  margin-top: auto;
+  display: flex;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.bd-actions .btn {
+  flex: 1;
+}
+.bd-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 6;
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+.bd-add {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bd-add-row {
+  display: flex;
+  gap: 6px;
+}
+.bd-add-row input {
+  width: 76px;
+  flex: none;
+}
+.bd-add-row .btn {
+  flex: 1;
+  white-space: nowrap;
+}
+.bd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.bd-chip {
+  min-width: 38px;
+  padding: 5px 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: rgba(8, 26, 40, 0.6);
+  color: var(--cyan-bright);
+  font-family: var(--font-head);
+  font-size: 13px;
+  cursor: pointer;
+}
+.bd-chip:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 0 10px rgba(96, 200, 245, 0.25);
+}
+.bd-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  margin-top: 18px;
+}
+.bd-cta .btn {
+  flex: none;
+}

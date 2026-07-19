@@ -66,6 +66,14 @@ export interface CargoBay {
   baseFace?: BayBaseFace
   /** In-plane fill/anchor direction on the base surface (mirrors W/L axes). Defaults to 'default'. */
   fill?: BayFill
+  /**
+   * Free 3D placement set in the Bay Designer. Position is the bay's local-frame origin in
+   * SCU units (the frame containers are laid out in: x=width centred, y=height from 0, z=length
+   * centred); rotation is Euler XYZ in DEGREES and is the bay's COMPLETE world orientation
+   * (it replaces the automatic base-face tipping — the Designer seeds it from that). Bays
+   * without a placement fall back to the automatic ship-like layout.
+   */
+  placement?: { x: number; y: number; z: number; rx: number; ry: number; rz: number }
 }
 
 export type ShipSizeCategory = 'Small' | 'Medium' | 'Large' | 'Capital'

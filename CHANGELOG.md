@@ -2,6 +2,44 @@
 
 ---
 
+## v0.7.0 — 2026-07-19 (⭐ 3D BAY DESIGNER — tam ekran bay editörü)
+- **Yeni: 3D Bay Designer.** Ship sayfasındaki 2D grid editörünün yerini tam ekran bir 3D editör
+  aldı ("Blender'da box editler gibi"). Gemi sayfasında **◧ 3D Bay Designer** ile açılır; taslakta
+  çalışır, **Save to ship** deyince gemiye yazılır (Cancel = hiçbir şey değişmez).
+- **Gizmo ile taşı/döndür:** **G** = taşı (1 SCU snap), **R** = döndür (5° snap). Blender gibi
+  **X/Y/Z** ile eksen kilidi (Z = yukarı, Y = derinlik). Sağ panelden elle konum/rotasyon da girilir;
+  **↺ Auto position** otomatik yerleşime döndürür.
+- **Add container area:** 1/2/4/8/16/24/32 çipleri **gerçek SC container ölçüleriyle** bay ekler
+  (8 SCU = 2×2×2 küp, 32 = 2×8×2…), Settings'teki Container Sizes listesine bağlı — 64 eklersen
+  o da çıkar. Serbest SCU girişi de var.
+- **Duplicate / Mirror ⇋ / Delete:** Mirror tek tıkla LEFT rack'ten aynalı RIGHT rack üretir
+  (x aynalanır, base yüzü ve isimdeki Left/Right çevrilir).
+- **Yüze tıkla = base surface (B):** bay'in gövdeye monte olduğu YÜZE tıkla, taban plakası oraya
+  geçer (menüden seçmek de hâlâ mümkün). **Plakadaki kareye tıkla = blocked hücre** (kolon/ekipman) —
+  kırmızı X'li görünür.
+- **Holografik taban plakası:** kutuların oturduğu yüzey 1 SCU'luk kare izli, yarı saydam plaka
+  olarak çizilir (Hull-C spindle hissi).
+- **Kaldırıldı:** 2D Cargo Grid Editor ve v0.6.4'ün geçici "Bays" sürükleme modu — ikisinin de işi
+  artık Designer'da. Veri modeli: `CargoBay.placement {x,y,z,rx,ry,rz}` (v0.6.4'ün `layout` alanı
+  hiç yayınlanmadığı için migration gerekmedi). Plan 3D, placement'lı bay'leri aynen o konumda gösterir.
+
+## v0.6.4 — 2026-07-19 (3D'de bay yerleşimi sürükle-bırak — YAYINLANMADI, v0.7.0 ile değişti)
+- **3D hold ekranında bay düzenleme ("Bays" modu):** Artık gemideki kargo bölmelerini (LEFT A/B/C/D
+  gibi) doğrudan 3D görünümde sürükleyip yerleştirebilirsin. Sağ üstteki **Bays** düğmesiyle moda gir,
+  bir bay'e tıkla, yeni yerine sürükle. **Boşluğa bırak** → yeni sütun (yan) / yeni sıra (ön-arka);
+  **başka bir bay'in üstüne bırak** → o hücrede üst kata istiflenir (üst-alt). Yeşil hayalet nereye
+  oturacağını gösterir. Sürükleme yatay düzlemde (X/Z), istifleme otomatik — dikey nişan derdi yok.
+- **Gemiye kalıcı kayıt:** Yaptığın yerleşim `layout` olarak gemiye kaydedilir ve kalıcıdır; Plan/route
+  hep bu düzeni kullanır. **"Reset bays"** ile otomatik yerleşime dönersin. (Örn. Hull B: A+B alt alta,
+  arkasında C+D alt alta; sağ taraf için ayrı sütun.)
+
+## v0.6.3 — 2026-07-19 (32:9 ultrawide OCR desteği)
+- **32:9 ultrawide ekranlarda görev okuma düzeltmesi:** Samsung Odyssey G9 gibi 32:9 (5120×1440)
+  monitörlerde `auto` mod kırpma yapmıyor, tüm ekranı tek geçişte okuyordu — bu yüzden görevler
+  bazen yanlış okunuyordu. Artık 32:9 için ayrı bir "PRIMARY OBJECTIVES" kırpma bölgesi var; oran
+  otomatik algılanıyor (16:9 ve 32:9 ayrı ayrı) ve doğru sütun yüksek çözünürlükte okunuyor.
+  Settings → Reading mode etiketleri güncellendi.
+
 ## v0.6.2 — 2026-07-05 (Uygulama içi güncelleme banner'ı)
 - **In-app güncelleme banner'ı:** Windows bildirimi kolay kaçıyor — artık güncelleme uygulamanın
   kendi içinde görünüyor: indirilirken sessiz bir şerit, hazır olunca **"Update vX.Y.Z is ready —

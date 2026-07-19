@@ -47,15 +47,84 @@ interface BayPlacement {
 }
 
 const HALF_PI = Math.PI / 2
+const GAP = 2.5
+
+/** Euler rotation that tips a bay so its cargo builds out of its base face (see BayPlacement.rot).
+ *  Exported for the Bay Designer, which seeds a new `placement` from this default orientation. */
+export function faceRot(bay: CargoBay): Vec3 {
+  switch (resolveBaseFace(bay)) {
+    case 'left':
+      return [0, 0, HALF_PI]
+    case 'right':
+      return [0, 0, -HALF_PI]
+    case 'top':
+      return [Math.PI, 0, 0]
+    case 'back':
+      return [HALF_PI, 0, 0]
+    case 'front':
+      return [-HALF_PI, 0, 0]
+    default:
+      return [0, 0, 0]
+  }
+}
+
+/** World-space axis-aligned bounds of a bay's box (local x∈±W/2, y∈[0,H], z∈±L/2) after `rot`. */
+function bayAABB(bay: CargoBay, rot: Vec3): { min: THREE.Vector3; max: THREE.Vector3 } {
+  const e = new THREE.Euler(rot[0], rot[1], rot[2])
+  const W = bay.width
+  const H = bay.maxStackHeight
+  const L = bay.length
+  const min = new THREE.Vector3(Infinity, Infinity, Infinity)
+  const max = new THREE.Vector3(-Infinity, -Infinity, -Infinity)
+  for (const sx of [-W / 2, W / 2])
+    for (const sy of [0, H])
+      for (const sz of [-L / 2, L / 2]) {
+        const v = new THREE.Vector3(sx, sy, sz).applyEuler(e)
+        min.min(v)
+        max.max(v)
+      }
+  return { min, max }
+}
+
+const DEG = Math.PI / 180
 
 /**
  * Arrange bays in a ship-like layout. Floor holds sit centre and stack up; face-mounted racks
  * (e.g. the Argo MOTH wings) flank the hull and build OUTWARD from their base surface — their
  * height axis points away from the ship, so a rack's WIDTH becomes its on-screen vertical size
- * and its HEIGHT (depth) runs outward.
+ * and its HEIGHT (depth) runs outward. Bays carrying a Designer `placement` are then overridden
+ * with that exact transform (position in SCU, rotation degrees — the placement is the complete
+ * orientation, replacing the automatic base-face tipping) and the scene bounds re-derived.
+ * Exported for the Bay Designer, which renders/edits the same arrangement.
  */
-function layoutBays(bays: CargoBay[]): { placed: BayPlacement[]; bx: number; bz: number; by: number } {
-  const GAP = 2.5
+export function layoutBays(bays: CargoBay[]): { placed: BayPlacement[]; bx: number; bz: number; by: number } {
+  const auto = autoLayout(bays)
+  if (!bays.some((b) => b.placement)) return auto
+  for (const p of auto.placed) {
+    const pl = p.bay.placement
+    if (pl) {
+      p.pos = [pl.x, pl.y, pl.z]
+      p.rot = [pl.rx * DEG, pl.ry * DEG, pl.rz * DEG]
+    }
+  }
+  // Re-derive scene bounds from the final transforms so the hull/camera still frame everything.
+  const min = new THREE.Vector3(Infinity, Infinity, Infinity)
+  const max = new THREE.Vector3(-Infinity, -Infinity, -Infinity)
+  for (const p of auto.placed) {
+    const a = bayAABB(p.bay, p.rot)
+    min.min(a.min.clone().add(new THREE.Vector3(...p.pos)))
+    max.max(a.max.clone().add(new THREE.Vector3(...p.pos)))
+  }
+  return {
+    placed: auto.placed,
+    bx: Math.max(max.x - min.x, 1),
+    bz: Math.max(max.z - min.z, 1),
+    by: Math.max(max.y, 1),
+  }
+}
+
+/** The automatic ship-like arrangement (no manual placements). */
+function autoLayout(bays: CargoBay[]): { placed: BayPlacement[]; bx: number; bz: number; by: number } {
   const racks = bays.filter((b) => !isFloorBay(b))
   const floors = bays.filter((b) => isFloorBay(b))
   const by = Math.max(1, ...floors.map((b) => b.maxStackHeight), ...racks.map((b) => b.width))
@@ -465,7 +534,9 @@ export default function CargoBay3D({
       <Canvas
         gl={{ alpha: true, antialias: true }}
         dpr={[1, 2]}
-        onPointerMissed={() => editMode && setSelectedKey(null)}
+        onPointerMissed={() => {
+          if (editMode) setSelectedKey(null)
+        }}
       >
         <fog attach="fog" args={['#06131f', radius * 1.8, radius * 4.5]} />
         <ambientLight intensity={0.65} />

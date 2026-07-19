@@ -88,8 +88,8 @@ function OcrModeSection() {
       <label className="settings-select">
         <span className="hud-label">Reading mode</span>
         <select value={ocrMode} onChange={(e) => setOcrMode(e.target.value as OcrMode)}>
-          <option value="auto">Auto-detect (recommended)</option>
-          <option value="crop">Objectives column · 16:9</option>
+          <option value="auto">Auto-detect · 16:9 & 32:9 (recommended)</option>
+          <option value="crop">Objectives column · force crop</option>
           <option value="full">Full screenshot · most compatible</option>
         </select>
       </label>

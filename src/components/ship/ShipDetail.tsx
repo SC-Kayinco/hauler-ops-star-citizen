@@ -2,8 +2,8 @@ import { useState, type CSSProperties } from 'react'
 import { useStore } from '@/store/useStore'
 import HologramViewer from '@/components/hologram/HologramViewer'
 import TechSpecsPanel from './TechSpecsPanel'
-import CargoGridEditor from './CargoGridEditor'
 import ContainerSizesEditor from './ContainerSizesEditor'
+import BayDesigner from './BayDesigner'
 import type { Ship } from '@/types'
 
 export default function ShipDetail() {
@@ -13,6 +13,7 @@ export default function ShipDetail() {
   const removeShip = useStore((s) => s.removeShip)
   const selectShip = useStore((s) => s.selectShip)
   const [editing, setEditing] = useState(false)
+  const [designing, setDesigning] = useState(false)
 
   if (!ship) {
     return (
@@ -65,11 +66,16 @@ export default function ShipDetail() {
               </button>
             </>
           )}
+          <button className="btn" onClick={() => setDesigning(true)}>
+            ◧ 3D Bay Designer
+          </button>
           <button className="btn btn--primary" onClick={() => setView('plan')}>
             Plan Load →
           </button>
         </div>
       </div>
+
+      {designing && <BayDesigner ship={ship} onClose={() => setDesigning(false)} />}
 
       <div className="ship-layout">
         <TechSpecsPanel ship={ship} />
@@ -90,7 +96,18 @@ export default function ShipDetail() {
 
       {editing && !ship.builtin && <ShipEditForm ship={ship} />}
 
-      <CargoGridEditor ship={ship} />
+      <section className="panel bd-cta">
+        <div>
+          <h3 className="section-label">Cargo Grid</h3>
+          <p className="muted sm">
+            The hold is edited in the fullscreen 3D Bay Designer now — add container areas, move /
+            rotate bays, pick base surfaces and block unusable cells, all in one place.
+          </p>
+        </div>
+        <button className="btn btn--primary" onClick={() => setDesigning(true)}>
+          ◧ Open Bay Designer
+        </button>
+      </section>
 
       <ContainerSizesEditor />
     </div>

@@ -166,6 +166,12 @@ async function makeThumb(dataUrl: string, maxW = 420): Promise<string> {
 // tight to the right so the middle DETAILS column doesn't bleed into the text.
 const OBJECTIVES_REGION: Region = { x0: 0.59, y0: 0.14, x1: 1, y1: 0.85 }
 
+// Same column at 32:9 ultrawide (e.g. Samsung Odyssey G9, 5120×1440). SC doesn't stretch
+// the contract panel to the full width — it stays centered — so the objectives column sits
+// in the MIDDLE of the frame (~0.55–0.73 wide), not against the right edge. Measured from
+// real G9 captures. x1 stops before the panel's right border so nothing bleeds in.
+const ULTRAWIDE_REGION: Region = { x0: 0.56, y0: 0.28, x1: 0.73, y1: 0.83 }
+
 /**
  * Merge a clean read of the objectives column (commodity/scu/locations) with a
  * full-screen read (reward + container size + "Contracted By", which live in the
@@ -263,13 +269,18 @@ export default function ImportPanel({ onAdd }: { onAdd: (m: Omit<Mission, 'id'>)
         setStatus(`Reading screenshot ${idx + 1}/${pick.length}…`)
         const dataUrl = await b.readImage(pick[idx].path)
         if (!dataUrl) continue
-        // Decide whether to crop the objectives column. That region is tuned to a 16:9 layout,
-        // so in 'auto' we only crop when the screenshot really is ~16:9; other aspect ratios
-        // (ultrawide / 16:10 / 32:9) fall back to whole-image OCR, which is layout-independent.
-        let doCrop = ocrMode === 'crop'
-        if (ocrMode === 'auto') {
+        // Pick the objectives-column crop tuned to this screenshot's aspect ratio — SC centers
+        // the contract panel differently per aspect, so a region tuned to 16:9 misses on 32:9.
+        // 'auto' crops only a ratio we've tuned (16:9 or 32:9 ultrawide) and otherwise falls
+        // back to whole-image OCR (layout-independent); 'crop' forces a crop, best-guessing by
+        // ratio; 'full' never crops.
+        let cropRegion: Region | null = null
+        if (ocrMode !== 'full') {
           const probe = await loadImage(dataUrl)
-          doCrop = Math.abs(probe.width / probe.height - 16 / 9) < 0.15
+          const ar = probe.width / probe.height
+          if (Math.abs(ar - 16 / 9) < 0.15) cropRegion = OBJECTIVES_REGION
+          else if (ar >= 3.0) cropRegion = ULTRAWIDE_REGION // 32:9 (Samsung Odyssey G9 & co.)
+          else if (ocrMode === 'crop') cropRegion = OBJECTIVES_REGION
         }
         // Full screen (multi-column layout) → automatic page segmentation for reward/header.
         await worker.setParameters({ tessedit_pageseg_mode: PSM.AUTO })
@@ -277,12 +288,12 @@ export default function ImportPanel({ onAdd }: { onAdd: (m: Omit<Mission, 'id'>)
         // Objectives column → treat as a single uniform block, upscaled higher (it's a small
         // slice of a 4K frame) and binarized so each glyph carries enough crisp pixels.
         let cropText = ''
-        if (doCrop) {
+        if (cropRegion) {
           await worker.setParameters({ tessedit_pageseg_mode: PSM.SINGLE_BLOCK })
-          cropText = (await worker.recognize(await toCanvas(dataUrl, OBJECTIVES_REGION, 3000, true))).data.text
+          cropText = (await worker.recognize(await toCanvas(dataUrl, cropRegion, 3000, true))).data.text
         }
         totalText += fullText.trim().length + cropText.trim().length
-        const merged = doCrop
+        const merged = cropRegion
           ? mergeParsed(parseMissions(cropText), parseMissions(fullText))
           : parseMissions(fullText)
         if (!merged.length) continue
